@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自适应网页</title>
+    <style>
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* 1. 底部背景 bg.png */
+            background: url('bg.png') no-repeat center bottom;
+            background-size: 100% auto; /* 背景宽度撑满，高度自适应 */
+            background-attachment: fixed; /* 可选：视需求决定是否固定背景 */
+            min-height: 100vh;
+            background-color: #f5f5f5; /* 备用背景色 */
+            font-size: 0; /* 消除图片间隙 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px; /* 防止内容被底部背景遮挡，可视情况调整 */
+        }
+
+        /* 通用图片样式：居中、不拉伸、自适应 */
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain; /* 保持比例 */
+            margin: 0 auto;
+        }
+
+        /* 顶部单列图片容器 */
+        .stack-container {
+            width: 100%;
+            max-width: 750px; /* 限制最大宽度，模拟手机视觉 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 网格布局容器：用于处理 5, 6, 7 的复杂排版 */
+        .grid-container {
+            width: 100%;
+            max-width: 750px;
+            display: grid;
+            /* 定义两列，中间间距由 gap 控制 */
+            grid-template-columns: 1fr 1fr; 
+            /* 间距：行间距 10px，列间距 50px (要求6) */
+            gap: 10px 50px; 
+            padding: 10px 20px; /* 左右留白 */
+            justify-items: center; /* 格子内容居中 */
+        }
+
+        /* 2, 3, 4, 5 的布局顺序 */
+        .img-top { margin-bottom: 0px; }
+
+        /* 图片 6 单独占满一行 */
+        .img-full-row {
+            grid-column: 1 / -1; /* 跨越所有列 */
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* 7-1 和 7-2 的交互样式 */
+        .clickable {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .clickable:active {
+            opacity: 0.8;
+        }
+
+        /* 对齐微调类 */
+        .col-left {
+            justify-self: end; /* 左侧元素靠右对齐缝隙 */
+        }
+        .col-right {
+            justify-self: start; /* 右侧元素靠左对齐缝隙 */
+        }
+        
+        /* 
+           为了严格满足 "7-1位于5-1下居中"，我们让 grid 的列内容默认居中即可。
+           如果想要两列整体居中且中间间隔50px，上面的 gap: 50px 已经实现。
+        */
+
+    </style>
+</head>
+<body>
+
+    <div class="stack-container">
+        <!-- 2. 图片1 顶部居中 -->
+        <img src="1.png" alt="图片1">
+
+        <!-- 3. 图片2 位于图片1下 -->
+        <img src="2.png" alt="图片2">
+
+        <!-- 4. 图片3 位于图片2下 -->
+        <img src="3.png" alt="图片3">
+
+        <!-- 5. 图片4 位于图片2(实际逻辑是3)下 -->
+        <img src="4.png" alt="图片4">
+    </div>
+
+    <!-- 复杂排版区域 -->
+    <div class="grid-container">
+        <!-- 6. 图片5-1 (左) 和 5-2 (右)，间隔50由 grid gap 控制 -->
+        <!-- 位于图片4下 -->
+        <div><img src="5-1.png" alt="图片5-1"></div>
+        <div><img src="5-2.png" alt="图片5-2"></div>
+
+        <!-- 7. 图片6 位于 5-1/5-2 下，居中 -->
+        <div class="img-full-row">
+            <img src="6.png" alt="图片6" id="img-to-save">
+        </div>
+
+        <!-- 8. 图片7-1 位于 5-1 下，7-2 位于 5-2 下 -->
+        <!-- 9. 点击事件 -->
+        <div>
+            <!-- 7-1 点击跳转 -->
+            <a href="https://qm.qq.com/q/h7ulsrPBHG" target="_blank">
+                <img src="7-1.png" alt="图片7-1" class="clickable">
+            </a>
+        </div>
+        
+        <div>
+            <!-- 7-2 点击保存 6.png -->
+            <img src="7-2.png" alt="图片7-2" class="clickable" id="btn-save">
+        </div>
+    </div>
+
+    <script>
+        // 实现点击 7-2.png 保存 6.png 的逻辑
+        document.getElementById('btn-save').addEventListener('click', function() {
+            // 获取图片6的源路径
+            const imgUrl = '6.png';
+            const imgName = '6.png';
+
+            // 创建一个临时的 a 标签
+            const link = document.createElement('a');
+            link.href = imgUrl;
+            link.download = imgName; // 设置下载文件名
+
+            // 将链接加入文档（Firefox等浏览器需要）
+            document.body.appendChild(link);
+
+            // 触发点击
+            link.click();
+
+            // 移除链接
+            document.body.removeChild(link);
+
+            // 提示（可选，因为部分手机浏览器如微信浏览器可能不支持直接下载，只能长按）
+            // alert('如果未自动下载，请长按上方的图片6进行保存');
+        });
+    </script>
+</body>
+</html>
