@@ -1,1 +1,1 @@
-https://qm.qq.com/q/8HX7b3Tdao
+mqqopensdkapi://bizAgent/qm/qr?url=http://qm.qq.com/cgi-bin/qm/qr?from=app&p=android&jump_from=webapi&k=flQuWIURKgmbXhY_oBR3sY3ujRr89bB6
