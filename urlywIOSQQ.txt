@@ -1,1 +1,1 @@
-mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1080175576&authSig=EiWMYjxcg/OCwp0PmrUTwcG6J6tOrg3sxQSFgMhKdf6WMmCQOXVDOuq25ymo5C0a&card_type=group&source=external&jump_from=webapi
+mqqapi://card/show_pslcard?src_type=internal&version=1&uin=1084773585&authSig=FuC8Okm/CR/TkaXOjqFa3Gg9WuSAFCxploPmuc7WRh+56ZbD4VVboW8RsNAO7iy3&card_type=group&source=external&jump_from=webapi
